@@ -55,7 +55,7 @@ void arrayCallback(const geometry_msgs::PoseArray::ConstPtr& PoseArray)
 	transform.setOrigin( tf::Vector3(
 		PoseArray->poses[0].position.x, 
 		PoseArray->poses[0].position.y, 
-		PoseArray->poses[0].position.z) );
+		PoseArray->poses[0].position.z));
 
 	transform.setRotation(tf::Quaternion(
 		PoseArray->poses[0].orientation.x,
