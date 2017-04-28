@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string.h>
 
 #include "ros/ros.h"
 #include "geometry_msgs/PoseArray.h"
@@ -40,18 +41,20 @@
 #include <tf/transform_listener.h>
 
 void arrayCallback(const geometry_msgs::PoseArray::ConstPtr& PoseArray)
-{
-	//cout << PoseArray->poses[0].position.x<< endl;
-	ROS_INFO("x = %f", PoseArray->poses[0].position.x);
-	ROS_INFO("y = %f", PoseArray->poses[0].position.y);
-	ROS_INFO("z = %f", PoseArray->poses[0].position.z);
+{		
+	if(&PoseArray->poses[0])
+	{	
+		ROS_INFO("x = %f", PoseArray->poses[0].position.x);
+		ROS_INFO("y = %f", PoseArray->poses[0].position.y);
+		ROS_INFO("z = %f", PoseArray->poses[0].position.z);
 
-	ROS_INFO("qx = %f", PoseArray->poses[0].orientation.x);
-	ROS_INFO("qy = %f", PoseArray->poses[0].orientation.y);
-	ROS_INFO("qz = %f", PoseArray->poses[0].orientation.z);
-	ROS_INFO("qw = %f", PoseArray->poses[0].orientation.w);
+		ROS_INFO("qx = %f", PoseArray->poses[0].orientation.x);
+		ROS_INFO("qy = %f", PoseArray->poses[0].orientation.y);
+		ROS_INFO("qz = %f", PoseArray->poses[0].orientation.z);
+		ROS_INFO("qw = %f", PoseArray->poses[0].orientation.w);
+	}
 
-	static tf::TransformBroadcaster brocaster;
+	/*static tf::TransformBroadcaster brocaster;
 	tf::Transform transform;
 	transform.setOrigin( tf::Vector3(
 		PoseArray->poses[0].position.x, 
@@ -64,7 +67,7 @@ void arrayCallback(const geometry_msgs::PoseArray::ConstPtr& PoseArray)
 		PoseArray->poses[0].orientation.z,
 		PoseArray->poses[0].orientation.w));
 
-	brocaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "tag_0", "usb_cam"));
+	brocaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "tag_0", "usb_cam"));*/
 	return;
 }
 
@@ -73,8 +76,7 @@ int main(int argc, char **argv)
 
 	ros::init(argc, argv, "arraySubscriber");
 	ros::NodeHandle n;
-	ros::Subscriber sub3 = n.subscribe("/tag_detections_pose", 100, arrayCallback);
-
+	ros::Subscriber sub3 = n.subscribe("/usb_cam/tag_detections_pose", 100, arrayCallback);
 	ros::spin();
 	return 0;
 }
