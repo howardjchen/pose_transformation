@@ -136,13 +136,16 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(pose_transformation src/pose_transformation.cpp)
+add_executable(transformation src/transformation.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(pose_transformation pose_transformation_generate_messages_cpap)
+add_dependencies(transformation transformation_generate_messages_cpap)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(pose_transformation ${catkin_LIBRARIES})
+target_link_libraries(transformation ${catkin_LIBRARIES})
 
 
 #############
