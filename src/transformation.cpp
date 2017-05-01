@@ -54,6 +54,8 @@ struct Quaternion
 };
 
 double RotationMatrix[row][col];
+string tcp_link, camera_link;
+bool publish_tf;
 
 
 /****************************************
@@ -86,7 +88,7 @@ void Static_publisher(double rot[][col], Quaternion q)
 
 	transform.setOrigin( tf::Vector3(rot[0][3], rot[1][3], rot[2][3]));
 	transform.setRotation(tf::Quaternion(q.x, q.y, q.z, q.w));
-	brocaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "TCP_link", "camera"));
+	brocaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), tcp_link, camera_link));
 	return;
 }
 
@@ -94,6 +96,17 @@ int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "RotMatrix_convertor");
 	ros::NodeHandle n;
+	bool params_loaded = true;
+
+	params_loaded *= n.getParam("tcp_link",tcp_link);
+	params_loaded *= n.getParam("camera_link",camera_link);
+	params_loaded *= n.getParam("publish_tf",publish_tf);
+
+	if(!params_loaded)
+	{
+		ROS_ERROR("Couldn'tfind all parameters. Closing.....");
+		return -1;
+	}
 
 	ROS_INFO("Please enter rotation matrix, order: a00-->a01-->a02.....-->a22\n");
 
@@ -122,7 +135,7 @@ int main(int argc, char **argv)
 	Quaternion q = Rot2Quaternion(RotationMatrix);
 	ROS_INFO("Quaternion = [ %lf %lf %lf %lf ]\n",q.x, q.y, q.z, q.w );
 
-	while(ros::ok())
+	while(ros::ok() && publish_tf == true)
 		Static_publisher(RotationMatrix,q);
 
 	return 0;

@@ -1,0 +1,12 @@
+<launch>
+	<arg name="tcp_link" default="tcp_link"/>
+	<arg name="camera_link" default="camera_link"/>
+	<arg name="publish_tf" default="true"/>
+
+	<ndoe name="RotMatrix_convertor" pkg="pose_transformation" type="transformation" output="screen">
+		<param name="tcp_link" value="$(arg tcp_link)" />
+		<param name="camera_link" value="$(arg camera_link)" />
+		<param name="publish_tf" value="$(arg publish_tf)" />
+	</ndoe>
+
+</launch>
