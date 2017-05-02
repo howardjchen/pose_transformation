@@ -4,11 +4,11 @@
 	<arg name="publish_tf" default="true"/>
 	<arg name="matrix_file" default="rotation.txt" />
 
-	<ndoe name="RotMatrix_convertor" pkg="pose_transformation" type="transformation" output="screen">
+	<node name="RotMatrix_convertor" pkg="pose_transformation" type="transformation" output="screen">
 		<param name="tcp_link" value="$(arg tcp_link)" />
 		<param name="camera_link" value="$(arg camera_link)" />
 		<param name="publish_tf" value="$(arg publish_tf)" />
 		<param name="matrix_path" value="$(find pose_transformation)/data/$(arg matrix_file)" />
-	</ndoe>
+	</node>
 
 </launch>

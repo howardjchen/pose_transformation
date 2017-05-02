@@ -69,9 +69,9 @@ void Static_publisher(double rot[][COL], Quaternion q)
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "RotMatrix_convertor");
-	ros::NodeHandle n;
+	ros::NodeHandle n("~");
 	bool params_loaded = true;
-	string matrix_path;
+	string matrix_path; 
 
 	params_loaded *= n.getParam("tcp_link",tcp_link);
 	params_loaded *= n.getParam("camera_link",camera_link);
@@ -80,10 +80,9 @@ int main(int argc, char **argv)
 
 	if(!params_loaded)
 	{
-		ROS_ERROR("Couldn'tfind all parameters. Closing.....");
-		return -1;
+		ROS_ERROR("Couldn't find all parameters. Closing.....");
+		return 0;
 	}
-
 
 	FILE *fp1 = fopen(matrix_path.c_str(),"r");
 	if(fp1 != NULL)
@@ -96,34 +95,12 @@ int main(int argc, char **argv)
 		}
 	}
 	else
-		ROS_ERROR("Cannot open the file");
-
-
-/*
-	ROS_INFO("Please enter rotation matrix, order: a00-->a01-->a02.....-->a22\n");
-
-	for (int i = 0; i < ROW; ++i)
 	{
-		for (int j = 0; j < COL; ++j)
-		{
-			if(ros::ok())
-				scanf("%lf",&RotationMatrix[i][j]);
-			else
-				return 0;
-		}
+		ROS_ERROR("Cannot open the file");
+		ROS_ERROR("the path is %s",matrix_path.c_str());
+		return 0;
 	}
 
-	printf("===============  the matrix : ===============\n");
-	for (int i = 0; i < ROW; ++i)
-	{	
-		for (int j = 0; j < COL; ++j)
-		{
-			printf("%lf ",RotationMatrix[i][j] );
-		}
-		printf("\n");
-	}
-	printf("=============================================\n");
-*/
 	Quaternion q = Rot2Quaternion(RotationMatrix);
 	ROS_INFO("Quaternion = [ %lf %lf %lf %lf ]\n",q.x, q.y, q.z, q.w );
 
