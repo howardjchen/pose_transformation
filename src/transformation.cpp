@@ -30,7 +30,7 @@
  *****************************************************************************/
 
 #include <transformation/transformation.hpp>
- 
+
 
 /****************************************
 * qw= √(1 + m00 + m11 + m22) /2
@@ -71,10 +71,12 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "RotMatrix_convertor");
 	ros::NodeHandle n;
 	bool params_loaded = true;
+	string matrix_path;
 
 	params_loaded *= n.getParam("tcp_link",tcp_link);
 	params_loaded *= n.getParam("camera_link",camera_link);
 	params_loaded *= n.getParam("publish_tf",publish_tf);
+	params_loaded *= n.getParam("matrix_path",matrix_path);
 
 	if(!params_loaded)
 	{
@@ -82,6 +84,22 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+
+	FILE *fp1 = fopen(matrix_path.c_str(),"r");
+	if(fp1 != NULL)
+	{
+		int row = 0;
+		while(fscanf(fp1,"%lf %lf %lf %lf", &RotationMatrix[row][0],&RotationMatrix[row][1],&RotationMatrix[row][2],&RotationMatrix[row][3]) != EOF)
+		{
+			ROS_INFO("%lf %lf %lf %lf \n", RotationMatrix[row][0],RotationMatrix[row][1],RotationMatrix[row][2],RotationMatrix[row][3]);
+			row++;
+		}
+	}
+	else
+		ROS_ERROR("Cannot open the file");
+
+
+/*
 	ROS_INFO("Please enter rotation matrix, order: a00-->a01-->a02.....-->a22\n");
 
 	for (int i = 0; i < ROW; ++i)
@@ -105,7 +123,7 @@ int main(int argc, char **argv)
 		printf("\n");
 	}
 	printf("=============================================\n");
-
+*/
 	Quaternion q = Rot2Quaternion(RotationMatrix);
 	ROS_INFO("Quaternion = [ %lf %lf %lf %lf ]\n",q.x, q.y, q.z, q.w );
 
