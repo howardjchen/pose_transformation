@@ -29,34 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-#include "ros/ros.h"
-#include "geometry_msgs/PoseArray.h"
-#include "geometry_msgs/Point.h"
-#include "geometry_msgs/Quaternion.h"
-#include "geometry_msgs/Pose.h"
-#include <tf/transform_broadcaster.h>
-#include <tf/transform_listener.h>
-
- #define row 3
- #define col 4
-
-struct Quaternion
-{
-	double x;
-	double y;
-	double z;
-	double w;
-};
-
-double RotationMatrix[row][col];
-string tcp_link, camera_link;
-bool publish_tf;
-
+#include <transformation/transformation.hpp>
+ 
 
 /****************************************
 * qw= √(1 + m00 + m11 + m22) /2
@@ -69,7 +43,7 @@ bool publish_tf;
     -0.0019   1       -0.0011   71.9933
     0.025    0.0011   1        37.6066 ]
 ****************************************/
-Quaternion Rot2Quaternion(double Rot[][col])
+Quaternion Rot2Quaternion(double Rot[][COL])
 {
 	Quaternion q;
 
@@ -81,7 +55,7 @@ Quaternion Rot2Quaternion(double Rot[][col])
 	return q;
 }
 
-void Static_publisher(double rot[][col], Quaternion q)
+void Static_publisher(double rot[][COL], Quaternion q)
 {
 	static tf::TransformBroadcaster brocaster;
 	tf::Transform transform;
@@ -110,9 +84,9 @@ int main(int argc, char **argv)
 
 	ROS_INFO("Please enter rotation matrix, order: a00-->a01-->a02.....-->a22\n");
 
-	for (int i = 0; i < row; ++i)
+	for (int i = 0; i < ROW; ++i)
 	{
-		for (int j = 0; j < col; ++j)
+		for (int j = 0; j < COL; ++j)
 		{
 			if(ros::ok())
 				scanf("%lf",&RotationMatrix[i][j]);
@@ -122,9 +96,9 @@ int main(int argc, char **argv)
 	}
 
 	printf("===============  the matrix : ===============\n");
-	for (int i = 0; i < row; ++i)
+	for (int i = 0; i < ROW; ++i)
 	{	
-		for (int j = 0; j < col; ++j)
+		for (int j = 0; j < COL; ++j)
 		{
 			printf("%lf ",RotationMatrix[i][j] );
 		}
