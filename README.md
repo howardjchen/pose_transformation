@@ -2,6 +2,8 @@
 
 - This package is a ROS package that could transform your 3x4 transformation matrix to position & quaternion, then publish using tf.
 
+## Maintainer
+- [Howard Chen ](https://github.com/s880367)   < s880367@gmail.com > 
 
 ## Usage
 - launch the package:
