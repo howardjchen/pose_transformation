@@ -1,7 +1,3 @@
-# Pose Transformation
-- This package can generate transformation topics among cameras.
-- By subscribing ```tag_detecion_pose``` from apriltag.
-
 # Rotation matrix convert and publish
 
 - This package is a ROS package that could transform your 3x4 transformation matrix to position & quaternion, then publish using tf.
